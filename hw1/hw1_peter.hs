@@ -1,25 +1,25 @@
 --------------------------------------------------------------------
--- Peter Rindal, Mark Alward									  --
--- CS381 - HW1: Syntax											  --
--- 4/21/2014													  --
+-- Peter Rindal, Mark Alward                                      --
+-- CS381 - HW1: Syntax                                            --
+-- 4/21/2014                                                      --
 --------------------------------------------------------------------
--- ex 1.a														  --
+-- ex 1.a                                                         --
 --------------------------------------------------------------------
 
 data Cmd = Pen Mode 
-		 | Moveto (Pos, Pos)
-		 | Def String Pars Cmd
-		 | Call String Vals
-		 | Cmdseq [ Cmd ]
-		 deriving Show
+         | Moveto (Pos, Pos)
+         | Def String Pars Cmd
+         | Call String Vals
+         | Cmdseq [ Cmd ]
+         deriving Show
 
 data Mode = Up 
-		  | Down
-		  deriving Show
+          | Down
+          deriving Show
 
 data Pos = Const Int 
          | Var String
-		 deriving Show
+         deriving Show
 
 type Pars = [String]
 type Vals = [Int]
@@ -28,40 +28,40 @@ type Vals = [Int]
 
 vector :: Cmd
 vector = Def "vector" [ "x1", "y1", "x2", "y2" ] 
-			(Cmdseq [ Pen Up ,
-					 Moveto (Var "x1", Var "y1"),
-					 Pen Down,
-					 Moveto (Var "x2", Var "y2") ] )
+             (Cmdseq [ Pen Up ,
+                     Moveto (Var "x1", Var "y1"),
+                     Pen Down,
+                     Moveto (Var "x2", Var "y2") ] )
 		
 -- ex 1.c ----------------------------------------------------------
 
 steps :: Int -> Cmd
 steps i 
-	| i <= 0 = Cmdseq [ Pen Up,
-						Moveto (Const 0, Const 0)]
-	| otherwise = Cmdseq [ Pen Up,
-						   Moveto (Const i, Const i),
-						   Pen Down,
-						   Moveto (Const (pred i), Const i),
-						   Moveto (Const (pred i), Const (pred i)),
-						   steps (pred i)] 
+    | i <= 0 = Cmdseq [ Pen Up,
+                        Moveto (Const 0, Const 0)]
+    | otherwise = Cmdseq [ Pen Up,
+                           Moveto (Const i, Const i),
+                           Pen Down,
+                           Moveto (Const (pred i), Const i),
+                           Moveto (Const (pred i), Const (pred i)),
+                           steps (pred i)] 
 
 --------------------------------------------------------------------
--- ex 2.a														  --
+-- ex 2.a                                                         --
 --------------------------------------------------------------------
 
 data Circuit = Circ Gates Links
 
 data Gates = Gateseq Int Gatefn Gates 
-		   | Emptygate
+           | Emptygate
 
 data Links = Linkseq Link Link Links
-		   | Emptylink
+           | Emptylink
 
 data Gatefn = And
-			| Or
-			| Xor
-			| Not
+            | Or
+            | Xor
+            | Not
 
 type Link = (Int, Int)
 
@@ -69,14 +69,14 @@ type Link = (Int, Int)
 
 halfadder :: Circuit
 halfadder = Circ 
-				(Gateseq 1 Xor 
-				(Gateseq 2 And 
-				Emptygate ))
-				
-				(Linkseq (1, 1) (2, 1) 
-				(Linkseq (1, 2) (2, 2) 
-				Emptylink))
-				
+              (Gateseq 1 Xor 
+              (Gateseq 2 And 
+              Emptygate ))
+
+              (Linkseq (1, 1) (2, 1) 
+              (Linkseq (1, 2) (2, 2) 
+              Emptylink))
+
 -- ex 2.c ----------------------------------------------------------
 
 pp_gatefn :: Gatefn -> String
@@ -88,13 +88,13 @@ pp_gatefn Not = "not"
 pp_links :: Links -> String
 pp_links Emptylink = ""
 pp_links (Linkseq (g1, w1) (g2, w2) rest)
-			= "from " ++ show g1 ++ "." ++ show w1 ++ " to " 
-			++ show g2 ++ "." ++ show w2 ++ "; " ++ pp_links rest
+            = "from " ++ show g1 ++ "." ++ show w1 ++ " to " 
+            ++ show g2 ++ "." ++ show w2 ++ "; " ++ pp_links rest
 
 pp_gates :: Gates -> String
 pp_gates Emptygate = ""
 pp_gates (Gateseq g gf rest) 
-			= show g ++ ":" ++ pp_gatefn gf ++ "; " ++ pp_gates rest
+            = show g ++ ":" ++ pp_gatefn gf ++ "; " ++ pp_gates rest
 
 pp_circuit :: Circuit -> String
 pp_circuit (Circ gates links) = pp_gates gates ++ pp_links links
@@ -104,19 +104,19 @@ pp_circuit (Circ gates links) = pp_gates gates ++ pp_links links
 --------------------------------------------------------------------
 
 data Expr = N Int
-		  | Plus Expr Expr
-		  | Times Expr Expr
-		  | Neg Expr
-		  deriving Show
+          | Plus Expr Expr
+          | Times Expr Expr
+          | Neg Expr
+          deriving Show
 
 data Op = Add
-		| Multiply
-		| Negate
-		deriving Show
+        | Multiply
+        | Negate
+        deriving Show
 
 data Exp = Num Int
-		 | Apply Op [Exp]
-		 deriving Show
+         | Apply Op [Exp]
+         deriving Show
 
 e = Apply Multiply [ Apply Negate [ Apply Add [ Num 4, Num 4 ] ], Num 7]
 
