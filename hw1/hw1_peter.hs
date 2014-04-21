@@ -18,7 +18,7 @@ data Mode = Up
 		  deriving Show
 
 data Pos = Const Int 
-		 | Var String
+         | Var String
 		 deriving Show
 
 type Pars = [String]
