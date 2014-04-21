@@ -8,27 +8,30 @@
 
 data Cmd = Pen Mode 
 		 | Moveto (Pos, Pos)
-		 | Def String [ String ] Cmd
-		 | Call String [ Int ]
+		 | Def String Pars Cmd
+		 | Call String Vals
 		 | Cmdseq [ Cmd ]
-		 deriving show
+		 deriving Show
 
 data Mode = Up 
 		  | Down
-		  deriving show
+		  deriving Show
 
 data Pos = Const Int 
 		 | Var String
-		 deriving show
+		 deriving Show
+
+type Pars = [String]
+type Vals = [Int]
 
 -- ex 1.b ----------------------------------------------------------
 
 vector :: Cmd
 vector = Def "vector" [ "x1", "y1", "x2", "y2" ] 
-			Cmdseq [ Pen Up ,
+			(Cmdseq [ Pen Up ,
 					 Moveto (Var "x1", Var "y1"),
 					 Pen Down,
-					 Moveto (Var "x2", Var "y2") ]
+					 Moveto (Var "x2", Var "y2") ] )
 		
 -- ex 1.c ----------------------------------------------------------
 
@@ -39,20 +42,20 @@ steps i
 	| otherwise = Cmdseq [ Pen Up,
 						   Moveto (Const i, Const i),
 						   Pen Down,
-						   Moveto (Const pred i, Const i),
-						   Moveto (Const pred i, Const pred i),
-						   step pred i] 
+						   Moveto (Const (pred i), Const i),
+						   Moveto (Const (pred i), Const (pred i)),
+						   steps (pred i)] 
 
 --------------------------------------------------------------------
 -- ex 2.a														  --
 --------------------------------------------------------------------
 
-data Vircuit = Circ Gates Links
+data Circuit = Circ Gates Links
 
 data Gates = Gateseq Int Gatefn Gates 
 		   | Emptygate
 
-data Links = Linkseq Int Int Int Int Links
+data Links = Linkseq Link Link Links
 		   | Emptylink
 
 data Gatefn = And
@@ -60,17 +63,19 @@ data Gatefn = And
 			| Xor
 			| Not
 
+type Link = (Int, Int)
+
 -- ex 2.b ----------------------------------------------------------
 
-halfAdder :: Circuit
+halfadder :: Circuit
 halfadder = Circ 
-				Gateseq 1 Xor 
-				Gateseq 2 And 
-				EmptyGate 
+				(Gateseq 1 Xor 
+				(Gateseq 2 And 
+				Emptygate ))
 				
-				Linkseq 1 1 2 1 
-				Linkseq 1 2 2 2 
-				EmptyLink
+				(Linkseq (1, 1) (2, 1) 
+				(Linkseq (1, 2) (2, 2) 
+				Emptylink))
 				
 -- ex 2.c ----------------------------------------------------------
 
@@ -82,17 +87,17 @@ pp_gatefn Not = "not"
 
 pp_links :: Links -> String
 pp_links Emptylink = ""
-pp_links (Linkseq g1 w1 g2 w2 rest)
+pp_links (Linkseq (g1, w1) (g2, w2) rest)
 			= "from " ++ show g1 ++ "." ++ show w1 ++ " to " 
-			++ show g2 ++ "." ++ show w2 ++ ";\n" ++ pp_links rest
+			++ show g2 ++ "." ++ show w2 ++ "; " ++ pp_links rest
 
-pp_gates :: Gates -> string
-pp_gates EmptyGate = ""
-pp_gates (Circ Gateseq g gf rest) 
-			= show g ++ ":" ++ pp_gatefn gf ++ ";\n" ++ pp_gates rest
+pp_gates :: Gates -> String
+pp_gates Emptygate = ""
+pp_gates (Gateseq g gf rest) 
+			= show g ++ ":" ++ pp_gatefn gf ++ "; " ++ pp_gates rest
 
-pp_curuit :: Curcuit -> String
-pp_curuit (Circ gates links) = pp_gates gates ++ pp_links links
+pp_circuit :: Circuit -> String
+pp_circuit (Circ gates links) = pp_gates gates ++ pp_links links
 
 --------------------------------------------------------------------
 -- ex 3.a														  --
@@ -101,19 +106,19 @@ pp_curuit (Circ gates links) = pp_gates gates ++ pp_links links
 data Expr = N Int
 		  | Plus Expr Expr
 		  | Times Expr Expr
-		  | neg Expr
-		  deriving show
+		  | Neg Expr
+		  deriving Show
 
 data Op = Add
 		| Multiply
 		| Negate
-		deriving show
+		deriving Show
 
 data Exp = Num Int
 		 | Apply Op [Exp]
-		 deriving show
+		 deriving Show
 
-Apply Multiply [ Apply Negate [ Apply Add [ Num 4, Num 4 ] ], Num 7]
+e = Apply Multiply [ Apply Negate [ Apply Add [ Num 4, Num 4 ] ], Num 7]
 
 -- ex 3.b ----------------------------------------------------------
 
@@ -142,6 +147,6 @@ Apply Multiply [ Apply Negate [ Apply Add [ Num 4, Num 4 ] ], Num 7]
 
 translate :: Expr -> Exp
 translate (N i)			 = Num i
-translate (Plus  e1 e2 ) = Apply Add	  [translate e1, translate e1]
-translate (Times e1 e2 ) = Apply Multiply [translate e1, translate e1]
-translate (Neg   e1 e2 ) = Apply Negate   [translate e1, translate e1]
+translate (Plus  e1 e2 ) = Apply Add	  [translate e1, translate e2]
+translate (Times e1 e2 ) = Apply Multiply [translate e1, translate e2]
+translate (Neg   e1    ) = Apply Negate   [translate e1]
