@@ -7,7 +7,7 @@
 --------------------------------------------------------------------
 
 data Cmd = Pen Mode 
-         | Moveto (Pos, Pos)
+         | Moveto Pos Pos
          | Def String Pars Cmd
          | Call String Vals
          | Cmdseq Cmd Cmd 
@@ -38,21 +38,21 @@ vector = Def "vector" (Params "x1"
                       (Param  "y2" ))))
 
             (Cmdseq (Pen Up)
-            (Cmdseq (Moveto (Var "x1", Var "y1"))
+            (Cmdseq (Moveto (Var "x1") (Var "y1"))
             (Cmdseq (Pen Down)
-                    (Moveto (Var "x2", Var "y2"))
+                    (Moveto (Var "x2") (Var "y2"))
              ) ) )
 		
 -- ex 1.c ----------------------------------------------------------
 
 steps :: Int -> Cmd
 steps i 
-    | i <= 0 = Cmdseq  (Pen Up) (Moveto (Const 0, Const 0))
+    | i <= 0 = Cmdseq  (Pen Up) (Moveto (Const 0) (Const 0))
     | otherwise =  (Cmdseq  (Pen Up)
-                   (Cmdseq  (Moveto (Const i, Const i))
+                   (Cmdseq  (Moveto (Const i) (Const i))
                    (Cmdseq  (Pen Down)
-                   (Cmdseq  (Moveto (Const (pred i), Const i))
-                   (Cmdseq  (Moveto (Const (pred i), Const (pred i)))
+                   (Cmdseq  (Moveto (Const (pred i)) (Const i))
+                   (Cmdseq  (Moveto (Const (pred i)) (Const (pred i)))
                             (steps (pred i))
                     ) ) ) ) )
                      
