@@ -21,13 +21,22 @@ data Pos = Const Int
          | Var String
          deriving Show
 
-type Pars = [String]
-type Vals = [Int]
+data Pars = Param String 
+          | Params String Pars
+		  deriving Show
+
+data Vals = V Int
+          | Vs Int Vals
+		  deriving Show
 
 -- ex 1.b ----------------------------------------------------------
 
 vector :: Cmd
-vector = Def "vector" [ "x1", "y1", "x2", "y2" ] 
+vector = Def "vector" (Params "x1" 
+                      (Params "y1" 
+                      (Params "x2" 
+                      (Param  "y2" ))))
+
             (Cmdseq (Pen Up)
             (Cmdseq (Moveto (Var "x1", Var "y1"))
             (Cmdseq (Pen Down)
@@ -39,8 +48,7 @@ vector = Def "vector" [ "x1", "y1", "x2", "y2" ]
 steps :: Int -> Cmd
 steps i 
     | i <= 0 = Cmdseq  (Pen Up) (Moveto (Const 0, Const 0))
-    | otherwise = 	
-    			   (Cmdseq  (Pen Up)
+    | otherwise =  (Cmdseq  (Pen Up)
                    (Cmdseq  (Moveto (Const i, Const i))
                    (Cmdseq  (Pen Down)
                    (Cmdseq  (Moveto (Const (pred i), Const i))
