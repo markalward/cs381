@@ -23,11 +23,11 @@ data Pos = Const Int
 
 data Pars = Param String 
           | Params String Pars
-		  deriving Show
+          deriving Show
 
 data Vals = V Int
           | Vs Int Vals
-		  deriving Show
+          deriving Show
 
 -- ex 1.b ----------------------------------------------------------
 
@@ -40,7 +40,7 @@ vector = Def "vector" (Params "x1"
             (Cmdseq (Pen Up)
             (Cmdseq (Moveto (Var "x1", Var "y1"))
             (Cmdseq (Pen Down)
-     				(Moveto (Var "x2", Var "y2"))
+                    (Moveto (Var "x2", Var "y2"))
              ) ) )
 		
 -- ex 1.c ----------------------------------------------------------
