@@ -8,9 +8,9 @@ data Cmd = LD Int
 		 | DUP 
 		 deriving Show
 		 
-type Stack = Maybe [Int] 
+type Stack = [Int] 
 
-type D = Stack -> Stack
+type D = Maybe Stack -> Maybe Stack
 
 semCmd :: Cmd -> D 
 
@@ -37,7 +37,10 @@ myMult = semCmd MULT myStack
 myDup = semCmd DUP myStack 
 myLd = semCmd (LD 3) myStack 
 
---sem :: Prog -> D 
+sem :: Prog -> D 
+sem (s:xs) (Just thisStack) = sem xs (semCmd s (Just thisStack))
+sem [] thisStack = thisStack
+sem _ _ = Nothing 
 
 --Example Programs ******
 p1 :: Prog

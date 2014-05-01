@@ -6,40 +6,9 @@
 -- ex 1                                                           --
 --------------------------------------------------------------------
 
-type Prog = [Cmd1]
-data Cmd1 = LD Int
-         | ADD
-         | MULT
-         | DUP
-         deriving Show
-
-type Stack = [Int]
-
--- D is the semantic domain
-type D = Maybe Stack1 -> Maybe Stack1
-
-semCmd1 :: Cmd1 -> D1
-semCmd1 _ Nothing = Nothing
-semCmd1 (LD i) (Just st) = Just (i : st)
-semCmd1 ADD (Just st) = case st of (x:y:xs) -> Just ((x+y) : xs)
-                                  _ -> Nothing
-semCmd1 MULT (Just st) = case st of (x:y:xs) -> Just ((x*y) : xs)
-                                   _ -> Nothing
-semCmd1 DUP (Just st) = case st of (x:xs) -> Just (x:x:xs)
-                                  _ -> Nothing
-
-sem1 :: Prog1 -> D1
-sem1 _ Nothing = Nothing
-sem1 [] st = st
-sem1 (x:xs) st = case semCmd1 x st of Nothing -> Nothing
-                                    newState -> sem xs newState
-
---------------------------------------------------------------------
--- ex 2.a                                                         --
---------------------------------------------------------------------
-
-type Prog2 = [Cmd2]
-data Cmd2 = LD Int
+type Prog = [Cmd]
+--extended for ex2.a
+data Cmd = LD Int
          | ADD
          | MULT
          | DUP
@@ -47,26 +16,30 @@ data Cmd2 = LD Int
          | CALL String
          deriving Show
 
---Defined in ex 1
-	--type Stack = [Int]
-	-- D is the semantic domain
-	--type D = Maybe Stack -> Maybe Stack
+type Stack = [Int]
+-- D is the semantic domain
+type D = Maybe Stack -> Maybe Stack
 
-semCmd2 :: Cmd2 -> D
-semCmd2 _ Nothing = Nothing
-semCmd2 (LD i) (Just st) = Just (i : st)
-semCmd2 ADD (Just st) = case st of (x:y:xs) -> Just ((x+y) : xs)
-                                  _ -> Nothing
-semCmd2 MULT (Just st) = case st of (x:y:xs) -> Just ((x*y) : xs)
-                                   _ -> Nothing
-semCmd2 DUP (Just st) = case st of (x:xs) -> Just (x:x:xs)
-                                  _ -> Nothing
+semCmd1 :: Cmd -> D
+semCmd1 _ Nothing = Nothing
+semCmd1 (LD i) (Just st) = Just (i : st)
+semCmd1 ADD (Just (x:y:xs)) = Just ((x+y) : xs)
+semCmd1 ADD (Just _       ) = Nothing
+semCmd1 MULT (Just (x:y:xs)) = Just ((x*y) : xs)
+semCmd1 MULT (Just _) = Nothing
+semCmd1 DUP (Just (x:xs)) = Just (x:x:xs)
+semCmd1 DUP (Just _) = Nothing
 
-sem1 :: Prog1 -> D
+sem1 :: Prog -> D
 sem1 _ Nothing = Nothing
 sem1 [] st = st
-sem1 (x:xs) st = case semCmd2 x st of Nothing -> Nothing
-                                    newState -> sem xs newState
+sem1 (x:xs) st = sem1 xs (semCmd1 x st)
+
+--------------------------------------------------------------------
+-- ex 2.a                                                         --
+--------------------------------------------------------------------
+
+--see ex 1
 
 --------------------------------------------------------------------
 -- ex 2.b                                                        --
@@ -80,26 +53,25 @@ data State2 = S Stack Macros | Error deriving Show
 -- ex 2.c                                                        --
 --------------------------------------------------------------------
 
-semCmd2 :: Cmd2 -> State2 -> State2
+semCmd2 :: Cmd -> State2 -> State2
 semCmd2 _ Error = Error
 semCmd2 (DEF name p) (S st macros) = S st ((name, p) : macros)
 semCmd2 (CALL name) s@(S st macros) = case lookup name macros of
                                         Nothing -> Error
                                         Just p -> sem2 p s
 semCmd2 (LD i) (S st macros) = S (i : st) macros
-semCmd2 ADD (S st macros) = case st of (x:y:xs) -> S ((x+y) : xs) macros
-                                       _ -> Error
-semCmd2 MULT (S st macros) = case st of (x:y:xs) -> S ((x*y) : xs) macros
-                                        _ -> Error
-semCmd2 DUP (S st macros) = case st of (x:xs) -> S (x:x:xs) macros
-                                       _ -> Error
+semCmd2 ADD (S (x:y:xs) macros) = S ((x+y) : xs) macros
+semCmd2 ADD (S _ macros) = Error
+semCmd2 MULT (S (x:y:xs) macros) = S ((x*y) : xs) macros
+semCmd2 MULT (S _ macros) = Error
+semCmd2 DUP (S (x:xs) macros) = S (x:x:xs) macros
+semCmd2 DUP (S _ macros) = Error
 
 
 sem2 :: Prog -> State2 -> State2
 sem2 _ Error = Error
 sem2 [] st = st
-sem2 (x:xs) st = case semCmd2 x st of Error -> Error
-                                      newState -> sem2 xs newState
+sem2 (x:xs) st = sem2 xs (semCmd2 x st)
 
 --------------------------------------------------------------------
 -- ex 3  														  --
@@ -107,7 +79,7 @@ sem2 (x:xs) st = case semCmd2 x st of Error -> Error
 
 data Cmd3 = Pen Mode
          | MoveTo Int Int
-         | Seq Op Op
+         | Seq Cmd3 Cmd3
 
 data Mode = Up | Down
 
