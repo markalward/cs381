@@ -64,4 +64,30 @@ sem2 (x:xs) st = case semCmd2 x st of Error -> Error
                                       newState -> sem2 xs newState
 
 
+-- ex 3
+
+data Cmd = Pen Mode
+         | MoveTo Int Int
+         | Seq Cmd Cmd
+         deriving Show
+data Mode = Up | Down
+            deriving Show
+
+type State = (Mode,Int,Int)
+type Line = (Int,Int,Int,Int)
+type Lines = [Line]
+
+semS :: Cmd -> State -> (State,Lines)
+semS (Pen d) (_, x, y) = ((d, x, y), [])
+semS (MoveTo i j) (Down, x, y) = ((Down, i, j), [(x,y,i,j)])
+semS (MoveTo i j) (Up, _, _) = ((Up, i, j), [])
+semS (Seq a b) state = (finalState, linesA ++ linesB)
+                    where (newState, linesA) = semS a state
+                          (finalState, linesB) = semS b newState
+
+sem' :: Cmd -> Lines
+sem' c = snd (semS c (Up, 0, 0))
+
+
+
 
