@@ -35,7 +35,7 @@ semS :: Cmd -> State -> (State,Lines)
 semS (Pen    m    ) (_,   x,y) = ((m   ,x ,y ), [           ]        )
 semS (MoveTo x' y') (Down,x,y) = ((Down,x',y'), [(x,y,x',y')]        )
 semS (MoveTo x' y') (Up,  _,_) = ((Up  ,x',y'), [           ]        )
-semS (Seq    s1 s2)  st        = ( fst r1     , (snd r1) ++ (snd r2) )
+semS (Seq    s1 s2)  st        = ( fst r2     , (snd r1) ++ (snd r2) )
                     where 
                         r1 = semS s1 st
                         r2 = semS s2 (fst r1)
