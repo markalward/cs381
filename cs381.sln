@@ -6,9 +6,11 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{26985E06-5855-440E-B91A-47DBB7FDB844}"
 	ProjectSection(SolutionItems) = preProject
 		hw1\edited.hs = hw1\edited.hs
-		..\hw1\hw1.txt = ..\hw1\hw1.txt
-		..\hw1\hw1_peter.hs = ..\hw1\hw1_peter.hs
-		..\hw1\prog.hs = ..\hw1\prog.hs
+		hw1\hw1.txt = hw1\hw1.txt
+		hw1\hw1_peter.hs = hw1\hw1_peter.hs
+		hw2\hw2_peter.hs = hw2\hw2_peter.hs
+		hw2\markprog.hs = hw2\markprog.hs
+		hw1\prog.hs = hw1\prog.hs
 	EndProjectSection
 EndProject
 Global
