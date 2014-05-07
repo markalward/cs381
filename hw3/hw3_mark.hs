@@ -54,6 +54,32 @@ semStatTC :: Prog -> Maybe Stack
 semStatTC p     | typeSafe p = Just (sem p [])
                 | otherwise  = Nothing
 
+--------------------------------------------------------------------
+-- ex 2.a                                                         --
+--------------------------------------------------------------------
+
+data Shape = X
+           | TD Shape Shape
+           | LR Shape Shape
+           deriving Show
+
+type BBox = (Int,Int)
+
+bbox :: Shape -> BBox
+bbox X          = (1,1)
+bbox (TD a b)   = (max ax bx, ay + by)
+                where   (ax, ay) = bbox a
+                        (bx, by) = bbox b
+bbox (LR a b)   = (ax + bx, max ay by)
+                where   (ax, ay) = bbox a
+                        (bx, by) = bbox b
+   
+
+--------------------------------------------------------------------
+-- ex 2.b                                                         --
+--------------------------------------------------------------------
+
+-- ?
 
 --------------------------------------------------------------------
 -- ex 3.a                                                         --
@@ -71,6 +97,7 @@ g x y = if not (null x) then [] else [y]
 --      g:  "null x" implies that x has type [a]. If y has type b, then the else expression
 --          has type [b]. The then expression will have type [b] as well.
 -- (3) Which type is more general?
+--      
 -- (4) Why do f and g have different types?
 
 
@@ -84,6 +111,9 @@ h x y = if True then map snd y else x
 -- ex 3.c                                                         --
 --------------------------------------------------------------------
 -- k :: (a -> b) -> ((a -> b) -> a) -> b
+k x y = x (y x)
+
+
 
 
 
