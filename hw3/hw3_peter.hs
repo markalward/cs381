@@ -10,12 +10,12 @@ type Prog = [Cmd]
 
 
 data Cmd = LD Int
-	 | ADD
-	 | MULT
-	 | DUP
-	 | IN
-	 | SWAP
-	 | POP Int
+         | ADD
+         | MULT
+         | DUP
+         | IN
+         | SWAP
+         | POP Int
 
 
 tpye Rank = Int
@@ -71,14 +71,14 @@ semStatTC p | stackSafe p = just sem p
 --------------------------------------------------------------------
 
 data shape = X
-	   | TD Shape Shape
-	   | LR Shape Shape
+           | TD Shape Shape
+           | LR Shape Shape
 
 type BBox = (Int,Int)
 
 max :: Int -> Int -> Int
 max j k | j > k     = j
-	| otherwise = k
+        | otherwise = k
 
 bbox :: Shape -> BBox
 bbox X 		= (1,1)
@@ -99,7 +99,7 @@ rect :: Shape -> Maybe BBox
 rect X	        = Just (1,1)
 rect (TD s1 s2) = 
        case (rect s1       , rect s2       ) of
-	    (Just (s1x,s1y), Just (s2x,s2y)) -> Just (s1x, s1y+s2y)
+	        (Just (s1x,s1y), Just (s2x,s2y)) -> Just (s1x, s1y+s2y)
             otherwise 		             -> Nothing
 
 --------------------------------------------------------------------
@@ -126,13 +126,13 @@ rect (TD s1 s2) =
 h []      _   = []
 h _      []   = []
 h (b:bs) (ab,abs) | (fst ab)== (fst ab)  = (snd ab):(h bs abs)
-		  | otherwise            = b:(h bs abs)
+		          | otherwise            = b:(h bs abs)
 
 
 
 k (a1 b1) ((a1 b2) a3) | a1 == a2  = b1
-		       | a1 == a3  = b2
-		       | otherwise = b1
+		               | a1 == a3  = b2
+		               | otherwise = b1
 
 
 
