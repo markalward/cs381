@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		hw1\hw1.txt = hw1\hw1.txt
 		hw1\hw1_peter.hs = hw1\hw1_peter.hs
 		hw2\hw2_peter.hs = hw2\hw2_peter.hs
+		hw3\hw3_peter.hs = hw3\hw3_peter.hs
 		hw2\markprog.hs = hw2\markprog.hs
 		hw1\prog.hs = hw1\prog.hs
 	EndProjectSection
