@@ -72,7 +72,7 @@ badProg = [(LD 3),MULT]
 -- Exercise 2 
 data Shape = X 
 		| TD Shape Shape 
-		| LD Shape Shape 
+		| LR Shape Shape 
 		deriving Show 
 
 --        (width,height)
@@ -81,8 +81,26 @@ type BBox = (Int, Int)
 --Part a
 bbox :: Shape -> BBox 
 bbox X = (1,1)
-bbox TD shape1 shape2 | width2 > width1 =  (width2,height1+height2)--want the max of the two widths, and the combined height
+bbox (TD shape1 shape2) | width2 > width1 =  (width2,height1+height2)--want the max of the two widths, and the combined height
 		      | otherwise       =  (width1,height1+height2)
 					where (width1,height1) = bbox shape1
 					      (width2,height2) = bbox shape2
-bbox 
+bbox (LR shape1 shape2) | height2 > height1 =  (width1+width2,height2)--want the max of the two heights, and the combined width
+		      | otherwise       =  (width1+width2,height1)
+					where (width1,height1) = bbox shape1
+					      (width2,height2) = bbox shape2
+
+testBox = (LR(TD(TD X X)(TD X X)) X)
+testRect = (LR(TD(TD X X)(TD X X)) (TD(TD X X)(TD X X)))
+
+--Part b
+rect :: Shape -> Maybe BBox 
+rect X = Just (1,1)
+rect (TD shape1 shape2) | width2 == width1 =  Just (width2,height1+height2)--need matching widths, and the combined height
+		      | otherwise       =  Nothing
+					where (width1,height1) = bbox shape1
+					      (width2,height2) = bbox shape2
+rect (LR shape1 shape2) | height2 == height1 =  Just (width1+width2,height2)--need matching heights, and the combined width
+		      | otherwise       =  Nothing
+					where (width1,height1) = bbox shape1
+					      (width2,height2) = bbox shape2
