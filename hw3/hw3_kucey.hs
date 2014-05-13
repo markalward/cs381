@@ -104,3 +104,20 @@ rect (LR shape1 shape2) | height2 == height1 =  Just (width1+width2,height2)--ne
 		      | otherwise       =  Nothing
 					where (width1,height1) = bbox shape1
 					      (width2,height2) = bbox shape2
+
+--Exercise 3 
+--Part a 
+{-
+	1) f::[a]->a->[a]
+	   g::[a]->b->[b]
+2) Function f can either output x or [y], infering that both [y] and x must be of the same type.  
+Function g can either output [y] or [].  Neither of these include x, so the types of x and y may be separate.  
+
+3) Function g is the more general of the two.  Function g can be called such that it's type is the same as f, but not vice versa.  
+
+4) As explained in 2), f is constrained to have x's elements and y as the same type because of the outputs x and [y].  
+Function g doesn't have this constraint; it either outputs [] or [y].  This allows y to be a disjoint type.  
+
+
+	
+-}
