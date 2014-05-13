@@ -4,18 +4,34 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{26985E06-5855-440E-B91A-47DBB7FDB844}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hw3", "hw3", "{21573D0D-1A20-422A-B9CF-5AC92D67F9F4}"
+	ProjectSection(SolutionItems) = preProject
+		hw3\hw3_kucey.hs = hw3\hw3_kucey.hs
+		hw3\hw3_mark.hs = hw3\hw3_mark.hs
+		hw3\hw3_peter.hs = hw3\hw3_peter.hs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hw2", "hw2", "{5BC63FF8-AF96-4192-B44B-805C6AD1C468}"
+	ProjectSection(SolutionItems) = preProject
+		hw2\hw2_peter.hs = hw2\hw2_peter.hs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hw1", "hw1", "{FAB02F28-3178-417F-96BE-272F720B73FE}"
 	ProjectSection(SolutionItems) = preProject
 		hw1\edited.hs = hw1\edited.hs
 		hw1\hw1.txt = hw1\hw1.txt
 		hw1\hw1_peter.hs = hw1\hw1_peter.hs
-		hw2\hw2_peter.hs = hw2\hw2_peter.hs
-		hw3\hw3_peter.hs = hw3\hw3_peter.hs
 		hw2\markprog.hs = hw2\markprog.hs
-		hw1\prog.hs = hw1\prog.hs
 	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{21573D0D-1A20-422A-B9CF-5AC92D67F9F4} = {26985E06-5855-440E-B91A-47DBB7FDB844}
+		{5BC63FF8-AF96-4192-B44B-805C6AD1C468} = {26985E06-5855-440E-B91A-47DBB7FDB844}
+		{FAB02F28-3178-417F-96BE-272F720B73FE} = {26985E06-5855-440E-B91A-47DBB7FDB844}
 	EndGlobalSection
 EndGlobal
