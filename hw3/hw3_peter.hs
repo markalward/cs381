@@ -1,10 +1,10 @@
---------------------------------------------------------------------
--- Peter Rindal, Mark Alward, Brenn Kucey                         --
--- CS381 - HW3: Types                                             --
--- 5/7/2014                                                       --
---------------------------------------------------------------------
--- ex 1.a                                                         --
---------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+-- Peter Rindal, Mark Alward, Brenn Kucey                                           --
+-- CS381 - HW3: Types                                                               --
+-- 5/7/2014                                                                         --
+--------------------------------------------------------------------------------------
+-- ex 1.a                                                                           --
+--------------------------------------------------------------------------------------
 
 type Prog = [Cmd]
 
@@ -39,12 +39,19 @@ rank (cmd:cs)   r = if r >= n then rank cs (r-n+m)
 			                  else Nothing
                     where (n,m) = rankC cmd
 
---------------------------------------------------------------------
--- ex 1.b                                                         --
---------------------------------------------------------------------
+test1 = [LD 3, DUP, ADD, LD 4, MULT, DUP, SWAP]  -- Just 2, Just [24,24]
+test2 = [LD 3, DUP, DUP, DUP, DUP, POP 5]        -- Just 0, Just []
+test3 = [LD 3, DUP, INC, SWAP]                   -- Just 2, Just [4,3]
+
+error1 = [LD 1, ADD]
+error2 = [LD 1, LD 2, MULT, POP 2]
+error3 = [LD 1, SWAP]
+
+--------------------------------------------------------------------------------------
+-- ex 1.b                                                                           --
+--------------------------------------------------------------------------------------
 
 type Stack = [Int]
-type Val   = Int -- not needed?
 
 semCmd :: Cmd -> Stack -> Stack
 semCmd (LD i)  s          = (i:s)
@@ -68,9 +75,9 @@ semStatTC :: Prog -> Maybe Stack
 semStatTC p | stackSafe p = Just (sem p [])
             | otherwise   = Nothing
 
---------------------------------------------------------------------
--- ex 2.a                                                         --
---------------------------------------------------------------------
+--------------------------------------------------------------------------------------
+-- ex 2.a                                                                           --
+--------------------------------------------------------------------------------------
 
 data Shape = X
            | TD Shape Shape
@@ -88,9 +95,13 @@ bbox (LR s1 s2) = (s1x + s2x, max s1y s2y)
                 where   (s1x,s1y) = bbox s1
                         (s2x,s2y) = bbox s2
 
---------------------------------------------------------------------
--- ex 2.b                                                         --
---------------------------------------------------------------------
+test4 = TD (LR X X) X                         -- (2,2)
+test5 = TD (TD (LR X X) (TD X X)) (LR X X)    -- (2,4)
+test6 = LR (LR X (TD X X)) (LR (LR X X) X)    -- (5,2)
+
+--------------------------------------------------------------------------------------
+-- ex 2.b                                                                           --
+--------------------------------------------------------------------------------------
 
 rect :: Shape -> Maybe BBox
 rect X	        = Just (1,1)
@@ -105,37 +116,44 @@ rect (LR s1 s2) =
                                                               else Nothing
             otherwise 		                 -> Nothing  
 
---------------------------------------------------------------------
--- ex 3.a                                                         --
---------------------------------------------------------------------
---
---(1) f has the paramter type of x = pointer, y = ??. The return 
---    type is a pointer if x is not null, otherwise it's a list of 
---    y's type. 
---    
---    g has the parameter type of x = pointer, y = ??. The return 
---    type is a list if y's type. 
---
---(2) 
---
---
---
---
---
---------------------------------------------------------------------
--- ex 3.b                                                         --
---------------------------------------------------------------------
+test7 = TD (LR X X) (LR X X)                 -- Just (2,2)
+test8 = LR (LR (TD X X) (TD X X)) (TD X X)   -- Just (3,2)
+test9 = LR (LR X X) (LR (LR X X)(LR X X))    -- Just (6,1)
+test10 = TD test9 test9                      -- Just (6,2)
+test11 = LR test8 test10                     -- Just (9,2)
 
---h []      _   = []
---h _      []   = []
---h (b:bs) (ab,abs) | (fst ab)== (fst ab)  = (snd ab):(h bs abs)
---		          | otherwise            = b:(h bs abs)
+error4 = TD test7 test8
+error5 = LR test9 test10
+error6 = TD test8 test11
 
+--------------------------------------------------------------------------------------
+-- ex 3.a                                                                           --
+--------------------------------------------------------------------------------------
+-- |                                                                              | --
+-- |(1) f :: [a] -> a -> [a]                                                      | --
+-- |    g :: [a] -> b -> [b]                                                      | --
+-- |                                                                              | --
+-- |(2) Function f can either output x or [y], infering that both [y] and x must  | --
+-- |     be of the same type.                                                     | --
+-- |    Function g can either output [y] or []. Neither of these include x, so    | --
+-- |     the types of x and y may be separate.                                    | --
+-- |                                                                              | --
+-- |(3) Function g is the more general of the two.  Function g can be called      | --
+-- |     such that it's type is the same as f, but not vice versa.                | --
+-- |                                                                              | --
+-- |(4) As explained in 2), f is constrained to have x's elements and y as the    | --
+-- |     same type because of the outputs x and [y].                              | --
+-- |    Function g doesn't have this constraint; it either outputs [] or [y].     | --
+-- |     This allows y to be a disjoint type.                                     | --
+--------------------------------------------------------------------------------------
+-- ex 3.b                                                                           --
+--------------------------------------------------------------------------------------
 
+-- h :: [b] -> [(a,b)] -> [b]
+h bs (ab:abs) | null (fst (unzip abs)) = bs ++ (snd (unzip abs))
 
---k (a1 b1) ((a1 b2) a3) | a1 == a2  = b1
---		               | a1 == a3  = b2
---		               | otherwise = b1
+-- k :: (a -> b) -> ((a -> b) -> a) -> b
+k fab  faba = fab (faba (fab))
 
 
 
