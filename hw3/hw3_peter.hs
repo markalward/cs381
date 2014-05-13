@@ -150,21 +150,28 @@ error6 = TD test8 test11
 --------------------------------------------------------------------------------------
 
 -- h :: [b] -> [(a,b)] -> [b]
-h bs (ab:abs) | null (fst (unzip abs)) = bs ++ (snd (unzip abs))
+h bs abs = bs ++ (snd (unzip abs))
 
+
+--------------------------------------------------------------------------------------
+-- ex 3.c                                                                        --
+--------------------------------------------------------------------------------------
 -- k :: (a -> b) -> ((a -> b) -> a) -> b
 k fab  faba = fab (faba (fab))
 
 
-
-
-
-
-
-
-
-
-
+--------------------------------------------------------------------------------------
+-- ex 3.d                                                                        --
+--------------------------------------------------------------------------------------
+-- | No. f ::a->b means that the function produces an output of polymorphic type   |--
+-- | and this type is not related to a. This means that the type of b must be      |--
+-- | generated nondeterministically (since it is not fixed and does not depend on  |--
+-- | the inputs), which is not possible in Haskell.                                |--
+-- |                                                                               |--
+-- | Also, f cannot exist in a statically typed language. The lack of a            |--
+-- | relationship between the input type a and the output type b makes it          |--
+-- | impossible to do type inference.                                              |--
+--------------------------------------------------------------------------------------
 
 
 
