@@ -25,6 +25,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hw1", "hw1", "{FAB02F28-317
 		hw2\markprog.hs = hw2\markprog.hs
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hw4", "hw4", "{BEF613C9-103B-4FBF-9AA2-C299E3EBC9B6}"
+	ProjectSection(SolutionItems) = preProject
+		hw4\hw4_peter.hs = hw4\hw4_peter.hs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -33,5 +38,6 @@ Global
 		{21573D0D-1A20-422A-B9CF-5AC92D67F9F4} = {26985E06-5855-440E-B91A-47DBB7FDB844}
 		{5BC63FF8-AF96-4192-B44B-805C6AD1C468} = {26985E06-5855-440E-B91A-47DBB7FDB844}
 		{FAB02F28-3178-417F-96BE-272F720B73FE} = {26985E06-5855-440E-B91A-47DBB7FDB844}
+		{BEF613C9-103B-4FBF-9AA2-C299E3EBC9B6} = {26985E06-5855-440E-B91A-47DBB7FDB844}
 	EndGlobalSection
 EndGlobal
