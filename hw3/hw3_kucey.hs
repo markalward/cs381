@@ -117,7 +117,24 @@ Function g can either output [y] or [].  Neither of these include x, so the type
 
 4) As explained in 2), f is constrained to have x's elements and y as the same type because of the outputs x and [y].  
 Function g doesn't have this constraint; it either outputs [] or [y].  This allows y to be a disjoint type.  
+-}
+--http://stackoverflow.com/questions/5821089/haskell-function-composition-operator-of-type-cd-abc-abd
 
+--part b 
+h :: [b] -> [(a,b)]->[b]
+h xs tuple = xs ++ (map snd tuple)
 
-	
+--part c 
+k :: (a->b) -> ((a->b)->a) -> b
+k forward backward = forward (backward forward)
+
+--pard d 
+{-
+For a specific set of types, like int's and char's, it would be possible to write this function, 
+but it is supposed to be generic.  
+There could be a function that maps generic types to ints, but not all types are enumerated (strings
+for instance), so that would not work.  If both a and b are enumerated types, we could have 
+getMappedB(getIndex(a)), but as a generic function we aren't guaranteed enumerated types.  
+The function a->b is a transform function.  Without knowing what the types a and b are 
+we cannot make a "kernel" for the transformation.  
 -}
