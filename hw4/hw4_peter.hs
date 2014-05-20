@@ -86,15 +86,15 @@ gf         [a:x-y+3,x:y*2,g{},f{},z:  ?,y:54]  y <- y + 4
                                                ret <- y + a
                                                ret <- y + (x - y + 3)
                                                ret <- y + ((y*2) - y + 3)
-gf [ret:109,a:x-y+3,x:y*2,g{},f{},z:  ?,y:54]  ret <- y * 2 + 3
-g                  [x:y*2,g{},f{},z:109,y:54]  z <- ret
-g          [ret:110,x:y*2,g{},f{},z:109,y:54]  ret <- z + 1
-                         [g{},f{},z:110,y:54]  z <- ret
-                                 [z:110,y:54]
+gf [ret:111,a:x-y+3,x:y*2,g{},f{},z:  ?,y:54]  ret <- y * 2 + 3
+g                  [x:y*2,g{},f{},z:111,y:54]  z <- ret
+g          [ret:112,x:y*2,g{},f{},z:111,y:54]  ret <- z + 1
+                         [g{},f{},z:112,y:54]  z <- ret
+                                 [z:112,y:54]
                                            []
 
 y = 54
-z = 110
+z = 112
 
 b)
                                          []
