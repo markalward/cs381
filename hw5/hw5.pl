@@ -26,3 +26,14 @@ meet(A,B) :- enroll(A,C),enroll(B,C),A\=B.
 meet(A,B) :- enroll(A,C),when(C,T),where(C,P),
              enroll(B,D),when(D,U),where(C,P),
              A\=B, T+1=:=U. 
+
+
+rdup([],[]).
+rdup([A|L],M) :- L = [A|_], rdup(L,M).
+rdup([A|L],[A|M]) :- rdup(L,M).
+
+
+flat([], []).
+flat([A|L], F) :- flat(A, B) , flat(L, M) , append(B, M, F).
+flat(L, [L]).
+
