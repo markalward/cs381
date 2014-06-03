@@ -58,16 +58,12 @@ flat([], []).
 flat([A|L], F) :- flat(A, B) , flat(L, M) , append(B, M, F).
 flat(L, [L]).
 
-flat2([]      , L).
-flat2([[] |RS], L) :- flat2(RS, L).
-flat2([[R]|RS], L) :- flat2( R, L)     , flat2(RS, L).
-flat2([R  |RS], L) :- append([R], L, L), flat2(RS, L).
-
 %-------------------------------------------------------------------
-%- ex 2.3                                                         --
+%- ex 2.c                                                         --
 %-------------------------------------------------------------------
-project_(1, [A|_], L) :- append([A], L, L).
-project_(N, [_|AS], L) :- project_(N-1, AS, L).
+project([], _, [], _).
+project(_, [], [], _).
+project([I|Is], [X|Xs], [X|Ls], P) :- I =:= P, project(Is, Xs, Ls, P+1).
+project(Is, [_|Xs], Ls, P) :- project(Is, Xs, Ls, P+1).
 
-project([], _, L).
-project([N|NS], A, L) :- project_(N, A, L) , project(NS, A, L).
+project(Is, Xs, Ls) :- project(Is, Xs, Ls, 1).
